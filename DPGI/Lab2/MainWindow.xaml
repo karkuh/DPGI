@@ -31,17 +31,18 @@
         <Border Grid.Row="0" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10"
                 Background="{StaticResource LinearPanelBrush}">
         </Border>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="75" Width="300" HorizontalAlignment="Left">
-            <Button ToolTip="Open">
+        <StackPanel FocusManager.IsFocusScope="True" Grid.Row="0" Orientation="Horizontal" Height="75" Width="300"
+                    HorizontalAlignment="Left">
+            <Button ToolTip="Open" Command="Open">
                 <Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\open.ico"></Image>
             </Button>
-            <Button ToolTip="Cut">
+            <Button ToolTip="Cut" Command="Cut">
                 <Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\erase.ico"></Image>
             </Button>
-            <Button ToolTip="Copy">
+            <Button ToolTip="Copy" Command="Copy">
                 <Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\copy.ico"></Image>
             </Button>
-            <Button ToolTip="Paste">
+            <Button ToolTip="Paste" Command="Paste">
                 <Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\paste.ico"></Image>
             </Button>
         </StackPanel>
@@ -53,9 +54,17 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Margin="10"></TextBox>
+                <TextBox  TextWrapping="Wrap" AcceptsReturn="True" Name="InputTextBox" Grid.Row="0" Margin="10" VerticalScrollBarVisibility="Visible"
+                          FontSize="{Binding ElementName=FontSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}">
+                </TextBox>
                 <DockPanel Grid.Row="1">
-                    <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15">OK</Button>
+                    <Label>Розмір шрифту</Label>
+                    <Slider Margin="4" MinWidth="100" Name="FontSlider" Maximum="100" Minimum="12"></Slider>
+
+                    <Button Command="Save" DockPanel.Dock="Bottom" VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center" Margin="15" Style="{x:Null}">
+                        OK
+                    </Button>
                 </DockPanel>
             </Grid>
         </Border>

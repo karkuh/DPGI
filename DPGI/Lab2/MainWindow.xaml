@@ -5,12 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="250" Width="500">
+        Title="TextEditor" Height="400" Width="600" MinHeight="210" MinWidth="320"
+        BorderThickness="7 0 7 8" BorderBrush="Gainsboro">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Border Grid.Row="0" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10"> </Border>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="75" Width="300" HorizontalAlignment="Left">
+            <Button ><Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\open.ico" ToolTip="Open"></Image></Button>
+            <Button ><Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\erase.ico" ToolTip="Erase"></Image></Button>
+            <Button ><Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\copy.ico" ToolTip="Copy"></Image></Button>
+            <Button ><Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\paste.ico" ToolTip="Paste"></Image></Button>
+        </StackPanel>
+        
+        <Border Grid.Row="1" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition  ></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Margin="10"></TextBox>
+                <DockPanel Grid.Row="1">
+                    <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15">OK</Button>
+                </DockPanel>
+            </Grid>
+        </Border>
+
+    </Grid>
 
 
-        <Canvas Background="Aqua">
-                <Label Canvas.Left="20" Canvas.Top="20">Label</Label>
-                <TextBox Canvas.Left="40" Canvas.Top="40">Text</TextBox>
-                <Button Canvas.Left="60" Canvas.Top="60">Button</Button>
-        </Canvas>
 </Window>

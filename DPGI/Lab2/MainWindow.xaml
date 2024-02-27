@@ -7,12 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="250" Width="500">
 
-        <DockPanel LastChildFill="False">
-                
-                <Label DockPanel.Dock="Top" HorizontalAlignment="Center">Label</Label>
-                <TextBox DockPanel.Dock="Left" Width="200" >TextBox</TextBox>
-                <TextBox DockPanel.Dock="Right" Width="200">TextBox</TextBox>
-                <Button DockPanel.Dock="Bottom" Height="20" Width="70" Margin="0 0 0 30" >Button</Button>
 
-        </DockPanel>
+        <Canvas Background="Aqua">
+                <Label Canvas.Left="20" Canvas.Top="20">Label</Label>
+                <TextBox Canvas.Left="40" Canvas.Top="40">Text</TextBox>
+                <Button Canvas.Left="60" Canvas.Top="60">Button</Button>
+        </Canvas>
 </Window>

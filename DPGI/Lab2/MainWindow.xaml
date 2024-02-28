@@ -31,7 +31,7 @@
         <Border Grid.Row="0" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10"
                 Background="{StaticResource LinearPanelBrush}">
         </Border>
-        <StackPanel FocusManager.IsFocusScope="True" Grid.Row="0" Orientation="Horizontal" Height="75" Width="300"
+        <StackPanel FocusManager.IsFocusScope="True" Grid.Row="0" Orientation="Horizontal" Height="75" 
                     HorizontalAlignment="Left">
             <Button ToolTip="Open" Command="Open">
                 <Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\open.ico"></Image>
@@ -45,6 +45,11 @@
             <Button ToolTip="Paste" Command="Paste">
                 <Image Source="F:\GIT\DPGI\DPGI\Lab2\Images\paste.ico"></Image>
             </Button>
+            <TextBlock  VerticalAlignment="Center">
+                <Hyperlink NavigateUri="https://github.com/karkuh/DPGI" RequestNavigate="Hyperlink_RequestNavigate">
+                    Розробник
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
 
         <Border Grid.Row="1" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10"
@@ -68,6 +73,8 @@
                 </DockPanel>
             </Grid>
         </Border>
+        
+        
 
     </Grid>
 

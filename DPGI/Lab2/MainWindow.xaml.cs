@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,5 +74,20 @@ namespace Lab2
         {
             InputTextBox.Text = "";
         }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, e.g., if the default web browser is not found.
+                MessageBox.Show("Error opening URL: " + ex.Message);
+            }
+        }
+
     }
 }

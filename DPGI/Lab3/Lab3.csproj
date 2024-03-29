@@ -11,4 +11,15 @@
       <Folder Include="Images" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Images\FirstPlayer.ico" />
+      <Resource Include="Images\FirstPlayer.ico" />
+      <None Remove="Images\SecondPlayer.ico" />
+      <Resource Include="Images\SecondPlayer.ico" />
+      <None Remove="Images\play.ico" />
+      <Resource Include="Images\play.ico" />
+      <None Remove="Images\stop.ico" />
+      <Resource Include="Images\stop.ico" />
+    </ItemGroup>
+
 </Project>

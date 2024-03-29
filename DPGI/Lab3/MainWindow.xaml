@@ -8,7 +8,6 @@
         Title="TicTacToe" MinHeight="500" MinWidth="800" Height="500" Width="800" 
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-       
         <LinearGradientBrush x:Key="LinearGradientBrush">
             <GradientStop Color="#02315E" Offset="0" />
             <GradientStop Color="#2F70AF" Offset="0.47" />
@@ -32,10 +31,6 @@
             <Setter Property="FontFamily" Value="Times New Roman"></Setter>
             <Setter Property="Background" Value="Transparent"></Setter>
             <Setter Property="BorderThickness" Value="2"></Setter>
-            
-
-
-            
         </Style>
         <Style x:Key="StatsTextBlocks" TargetType="TextBlock" >
             <Setter Property="Foreground" Value="Wheat"></Setter>
@@ -43,6 +38,7 @@
             <Setter Property="Margin" Value="10 0 0 0"></Setter>
         </Style>
     </Window.Resources>
+    
     <Grid Background="{StaticResource LinearGradientBrush}"  SizeChanged="FrameworkElement_OnSizeChanged">
 
         <Grid.RowDefinitions>
@@ -56,7 +52,6 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
-
         <Grid Grid.Row="0"  Grid.Column="0">
             <Label FontSize="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Player 1</Label>
         </Grid>
@@ -64,7 +59,6 @@
         <DockPanel Grid.Row="0"  Grid.Column="1">
             <Label DockPanel.Dock="Bottom" Name="PlayerMoveLabel" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom">The player's move: </Label>
             <Label DockPanel.Dock="Top"  FontSize="50" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">TicTacToe</Label>
-
         </DockPanel>
         
         <Grid Grid.Row="0"  Grid.Column="2">
@@ -77,9 +71,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
-
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Source="F:\GIT\DPGI\DPGI\Lab3\Images\FirstPlayer.ico"></Image>
+            <Image Grid.Row="0" Source="\Images\FirstPlayer.ico"></Image>
             <StackPanel  Grid.Row="1" x:Name="TextBlockPanel1">
                 <TextBlock Style="{StaticResource StatsTextBlocks}" Name="FirstPlayerName">Name: </TextBlock>
                 <TextBlock Style="{StaticResource StatsTextBlocks}" Name="FirstPlayerWin">Win: </TextBlock>
@@ -88,15 +81,14 @@
             </StackPanel>
         </Grid>
         </Border>
-
-
+        
         <Border Grid.Row="1"  Grid.Column="2" BorderThickness="2" BorderBrush="LimeGreen" Margin="5">
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Source="F:\GIT\DPGI\DPGI\Lab3\Images\SecondPlayer.ico"></Image>
+            <Image Grid.Row="0" Source="\Images\SecondPlayer.ico"></Image>
 
             <StackPanel  Grid.Row="1" x:Name="TextBlockPanel2">
                 <TextBlock Style="{StaticResource StatsTextBlocks}" Name="SecondPlayerName">Name: </TextBlock>
@@ -138,10 +130,10 @@
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
 
                 <Button  HorizontalAlignment="Center" Margin="20" Background="Transparent" BorderThickness="0" Click="EndGame_Click">
-                    <Image Source="F:\GIT\DPGI\DPGI\Lab3\Images\stop.ico"></Image>
+                    <Image Source="\Images\stop.ico"></Image>
                 </Button>
                 <Button   HorizontalAlignment="Center" Margin="20" Background="Transparent" BorderThickness="0" Click="StartGame_Click">
-                    <Image Source="F:\GIT\DPGI\DPGI\Lab3\Images\play.ico"></Image>
+                    <Image Source="\Images\play.ico"></Image>
                 </Button>
             </StackPanel>
 

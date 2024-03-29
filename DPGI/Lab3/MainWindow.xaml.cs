@@ -186,13 +186,13 @@ namespace Lab3
 
                 if (_playersMove % 2 == 0)
                 {
-                    _player1.Win++;
-                    _player2.Lose++;
+                    _player1.WinGame();
+                    _player2.LoseGame();
                 }
                 else
                 {
-                    _player2.Win++;
-                    _player1.Lose++;
+                    _player2.WinGame();
+                    _player1.LoseGame();
                 }
 
                 ChangeStatsForFirstPlayer();
@@ -207,8 +207,8 @@ namespace Lab3
                 DefaultViewMainGame();
                 PlayerMoveLabel.Content = "The player's move:";
                 MessageBox.Show("Draw!");
-                _player1.Draw++;
-                _player2.Draw++;
+                _player1.DrawGame();
+                _player2.DrawGame();
                 ChangeStatsForFirstPlayer();
                 ChangeStatsForSecondPlayer();
             }

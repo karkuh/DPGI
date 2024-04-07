@@ -5,8 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab4"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800"
+        Loaded="Window_Loaded"
+        Closing="MainWindow_OnClosing"
+        WindowStartupLocation="CenterScreen">
+    
+    <DockPanel Background="LightGray">
+        <ToolBar DockPanel.Dock="Top" Background="LightSteelBlue">
+            <Button Content="Create" Click="CreateButton_Click"/>
+            <Button Content="Update" Click="UpdateButton_Click"/>
+            <Button Content="Delete" Click="DeleteButton_Click"/>
+        </ToolBar>
 
-    </Grid>
+        <!-- Main Grid Container -->
+        <Grid DataContext="{Binding ElementName=list, Path=SelectedItem}" Background="WhiteSmoke">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- ListBox -->
+            <ListBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,3"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     Name="list"
+                     ItemsSource="{Binding}" Background="White">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- TextBlocks and TextBoxes -->
+            <TextBlock Grid.Row="1" Margin="5" VerticalAlignment="Center" Foreground="DarkBlue">ISBN:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5" IsReadOnly="True" Text="{Binding Path=ISBN, Mode=OneWay}" Focusable="True" Background="LightYellow"/>
+
+            <TextBlock Grid.Row="2" Margin="5" VerticalAlignment="Center" Foreground="DarkBlue">Name:</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" IsReadOnly="True" Text="{Binding Path=name, Mode=OneWay}" Focusable="True" Background="LightYellow"/>
+
+            <TextBlock Grid.Row="3" Margin="5" VerticalAlignment="Center" Foreground="DarkBlue">Author:</TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="5" IsReadOnly="True" Text="{Binding Path=author, Mode=OneWay}" Focusable="True" Background="LightYellow"/>
+
+            <TextBlock Grid.Row="4" Margin="5" VerticalAlignment="Center" Foreground="DarkBlue">Publisher:</TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="5" IsReadOnly="True" Text="{Binding Path=publisher, Mode=OneWay}" Focusable="True" Background="LightYellow"/>
+
+            <TextBlock Grid.Row="5" Margin="5" VerticalAlignment="Center" Foreground="DarkBlue">Year:</TextBlock>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="5" IsReadOnly="True" Text="{Binding Path=year, Mode=OneWay}" Focusable="True" Background="LightYellow"/>
+        </Grid>
+    </DockPanel>
 </Window>

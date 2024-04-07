@@ -1,0 +1,42 @@
+﻿<Window x:Class="Lab4.ChangeDataWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Lab4"
+        mc:Ignorable="d"
+        Title="ChangeDataWindow" Height="350" Width="400" 
+        Closing ="ChangeDataWindow_OnClosing"
+        WindowStartupLocation="CenterScreen">
+    <Grid Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Label Name="PreLabel" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" HorizontalAlignment="Center" FontSize="16" Margin="0 0 0 10">Change data</Label>
+        <Label Grid.Row="1"  Grid.Column="0" FontSize="16" Foreground="DarkBlue">ISBN</Label>
+        <TextBox Grid.Row="1"  Grid.Column="1" FontSize="16" Name="TextBox1" PreviewTextInput="TextBox1_OnPreviewTextInput" Background="LightYellow"></TextBox>
+        <Label Grid.Row="2"  Grid.Column="0" FontSize="16" Foreground="DarkBlue">Name</Label>
+        <TextBox Grid.Row="2"  Grid.Column="1" FontSize="16" Name="TextBox2" Background="LightYellow"></TextBox>
+        <Label Grid.Row="3"  Grid.Column="0" FontSize="16" Foreground="DarkBlue">Author</Label>
+        <TextBox Grid.Row="3"  Grid.Column="1" FontSize="16" Name="TextBox3" Background="LightYellow"></TextBox>
+        <Label Grid.Row="4"  Grid.Column="0" FontSize="16" Foreground="DarkBlue">Publisher</Label>
+        <TextBox Grid.Row="4"  Grid.Column="1" FontSize="16" Name="TextBox4" Background="LightYellow"></TextBox>
+        <Label Grid.Row="5"  Grid.Column="0" FontSize="16" Foreground="DarkBlue">Year</Label>
+        <TextBox Grid.Row="5"  Grid.Column="1" FontSize="16" Name="TextBox5" PreviewTextInput="TextBox5_OnPreviewTextInput" Background="LightYellow"></TextBox>
+        <Button Name="ButtonChange" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Height="30" Width="80" FontSize="16" Margin="0 10 0 0" Click="ButtonBase_OnClick" Background="LightSteelBlue">Change</Button>
+        <Button Name="BackButton" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" Height="30" Width="80" FontSize="16" Margin="0 10 0 0" Click="BackButton_Click" Background="LightSteelBlue">Back</Button>
+    </Grid>
+    
+</Window>

@@ -46,23 +46,34 @@ namespace Lab4
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = $"select * froM books where ISBN = {ISBN};";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
+                try
                 {
-                    dt.Load(reader);
-                }
-                else
-                {
-                    MessageBox.Show("Не існує такого ISBN");
-                    return null;
-                }
+                    string query = $"SELECT * FROM books WHERE ISBN = '{ISBN}'";
+                    SqlCommand command = new SqlCommand(query, connection);
 
-                connection.Close();
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        dt.Load(reader);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не існує такого ISBN");
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Помилка при виконанні запиту до бази даних: {ex.Message}");
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
             }
+
 
             return dt;
         }

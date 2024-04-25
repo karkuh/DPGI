@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lab3
 {
@@ -20,10 +10,11 @@ namespace Lab3
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Player _player1 = null;
-        private Player _player2 = null;
+        private User _player1 = null;
+        private User _player2 = null;
         private bool _isNowGame;
         private int _playersMove;
+        private DbContextTicTacToe _context;
 
 
         public MainWindow()
@@ -31,33 +22,153 @@ namespace Lab3
             InitializeComponent();
             _isNowGame = false;
             _playersMove = 0;
+            _context = new DbContextTicTacToe();
         }
 
         private void FrameworkElement_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            foreach (UIElement element in TextBlockPanel1.Children)
-            {
-                if (element is TextBlock textBlock)
-                {
-                    textBlock.FontSize = 22 * e.NewSize.Height / 500;
-                }
-            }
+            AdjustFontSize(TextBlockPanel1.Children, 20);
+            AdjustFontSize(TextBlockPanel2.Children, 20);
+            AdjustFontSize(MainGame.Children, 68);
+        }
 
-            foreach (UIElement element in TextBlockPanel2.Children)
+        private void AdjustFontSize(UIElementCollection elements, int number)
+        {
+            foreach (UIElement element in elements)
             {
-                if (element is TextBlock textBlock)
+                if (element is Control control)
                 {
-                    textBlock.FontSize = 22 * e.NewSize.Height / 500;
+                    control.FontSize = number * control.ActualHeight / 500;
                 }
             }
+        }
 
-            foreach (UIElement element in MainGame.Children)
+
+        private void AddUser_Click(object sender, RoutedEventArgs e)
+        {
+            var name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name:");
+            var password = Microsoft.VisualBasic.Interaction.InputBox("Enter a password:");
+            _context.Database.ExecuteSqlRaw($"INSERT INTO user_credentials (password) VALUES ('{password}')");
+
+            var userId = _context.UserCredentials.OrderByDescending(u => u.Id).Select(u => u.Id).FirstOrDefault();
+            _context.Database.ExecuteSqlRaw($"INSERT INTO Users (id, name) VALUES ({userId}, '{name}');");
+
+            MessageBox.Show("User created, your id is " + userId);
+        }
+
+        private void ChangeName_Click(object sender, RoutedEventArgs e)
+        {
+            var id = Microsoft.VisualBasic.Interaction.InputBox("Enter a id:");
+            var password = Microsoft.VisualBasic.Interaction.InputBox("Enter a password:");
+            var query = _context.Users.FromSqlRaw(
+                    $"SELECT u.id, u.name, u.win, u.lose, u.draw FROM users u INNER JOIN user_credentials on u.id = user_credentials.id WHERE user_credentials.id = {id} AND user_credentials.password = '{password}';")
+                .ToList();
+
+            if (!query.Any())
             {
-                if (element is Button button)
+                MessageBox.Show("This user does not exist.");
+            }
+            else
+            {
+                var user = query.First();
+                var newName = Microsoft.VisualBasic.Interaction.InputBox("Enter a new name:");
+                user.Name = newName;
+                _context.SaveChanges();
+                MessageBox.Show("Name changed");
+                if (_player1 is not null)
                 {
-                    button.FontSize = 68 * e.NewSize.Height / 500;
+                    if (user.Id == _player1.Id)
+                    {
+                        _player1 = user;
+                        ChangeStatsForFirstPlayer();
+                    }
+                }
+
+                if (_player2 is not null)
+                {
+                    if (user.Id == _player2.Id && _player2 is not null)
+                    {
+                        _player2 = user;
+                        ChangeStatsForSecondPlayer();
+                    }
                 }
             }
+        }
+
+        private void ChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+            var id = Microsoft.VisualBasic.Interaction.InputBox("Enter a id:");
+            var password = Microsoft.VisualBasic.Interaction.InputBox("Enter a password:");
+            var query = _context.UserCredentials.FromSqlRaw(
+                    $"SELECT id, password FROM user_credentials  WHERE user_credentials.id = {id} AND user_credentials.password = '{password}';")
+                .ToList();
+
+            if (!query.Any())
+            {
+                MessageBox.Show("This user does not exist.");
+            }
+            else
+            {
+                var userCredential = query.First();
+                var newPassword = Microsoft.VisualBasic.Interaction.InputBox("Enter a new password:");
+                userCredential.Password = newPassword;
+                _context.SaveChanges();
+                MessageBox.Show("Password changed");
+            }
+        }
+
+        private void DeleteUser_Click(object sender, RoutedEventArgs e)
+        {
+            var id = Microsoft.VisualBasic.Interaction.InputBox("Enter a id:");
+            var password = Microsoft.VisualBasic.Interaction.InputBox("Enter a password:");
+            var query = _context.Users.FromSqlRaw(
+                    $"SELECT u.id, u.name, u.win, u.lose, u.draw FROM users u INNER JOIN user_credentials on u.id = user_credentials.id WHERE user_credentials.id = {id} AND user_credentials.password = '{password}';")
+                .ToList();
+
+            if (!query.Any())
+            {
+                MessageBox.Show("This user does not exist.");
+            }
+            else
+            {
+                var user = query.First();
+                var userCredential = _context.UserCredentials.Find(user.Id);
+
+                if (_player1 is not null)
+                {
+                    if (user.Id == _player1.Id)
+                    {
+                        _player1 = null;
+                        ChangeStatsForFirstPlayer();
+                    }
+                }
+
+                if (_player2 is not null)
+                {
+                    if (user.Id == _player2.Id && _player2 is not null)
+                    {
+                        _player2 = null;
+                        ChangeStatsForSecondPlayer();
+                    }
+                }
+
+                _context.Remove(user);
+                _context.Remove(userCredential);
+                _context.SaveChanges();
+                MessageBox.Show("User deleted");
+            }
+        }
+
+
+        private void FindIdUser_Click(object sender, RoutedEventArgs e)
+        {
+            var name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name:");
+            var password = Microsoft.VisualBasic.Interaction.InputBox("Enter a password:");
+            var query = _context.Users.FromSqlRaw(
+                    $"SELECT u.id, u.name, u.win, u.lose, u.draw FROM users u INNER JOIN user_credentials on u.id = user_credentials.id WHERE u.name = '{name}' AND user_credentials.password = '{password}';")
+                .ToList();
+
+            MessageBox.Show(!query.Any() ? "This user does not exist." : $"ID = {query.First().Id}");
         }
 
         private void SetPlayer_Click(object sender, RoutedEventArgs e)
@@ -75,38 +186,105 @@ namespace Lab3
             }
 
 
-            string name;
-            do
+            var id = Microsoft.VisualBasic.Interaction.InputBox("Enter a id:");
+            var password = Microsoft.VisualBasic.Interaction.InputBox("Enter a password:");
+            if (!int.TryParse(id, out _))
             {
-                name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name of up to 10 characters:");
-            } while (name.Length is > 10 or 0);
+                MessageBox.Show("Id is incorrect");
+                return;
+            }
 
+            var query = _context.Users.FromSqlRaw(
+                    $"SELECT u.id, u.name, u.win, u.lose, u.draw FROM users u INNER JOIN user_credentials on u.id = user_credentials.id WHERE user_credentials.id = {id} AND user_credentials.password = '{password}';")
+                .ToList();
+
+            if (!query.Any())
+            {
+                MessageBox.Show("This user does not exist.");
+            }
+            else
+            {
+                var user = query.First();
+                if ((sender as Button)!.Content.ToString()!.Contains('1'))
+                {
+                    _player1 = user;
+                    ChangeStatsForFirstPlayer();
+                }
+                else
+                {
+                    _player2 = user;
+                    ChangeStatsForSecondPlayer();
+                }
+
+                MessageBox.Show("Hello, " + user.Name);
+            }
+        }
+
+
+        private void ExitPlayer_Click(object sender, RoutedEventArgs e)
+        {
             if ((sender as Button)!.Content.ToString()!.Contains('1'))
             {
-                _player1 = new Player(name);
+                if (_player1 == null)
+                {
+                    return;
+                }
+                if (MessageBox.Show("You want exit?", "", MessageBoxButton.YesNo) == MessageBoxResult.No) return;
+
+                _player1 = null;
                 ChangeStatsForFirstPlayer();
             }
             else
             {
-                _player2 = new Player(name);
+                if (_player2 == null)
+                {
+                    return;
+                }
+                if (MessageBox.Show("You want exit?", "", MessageBoxButton.YesNo) == MessageBoxResult.No) return;
+
+                _player2 = null;
                 ChangeStatsForSecondPlayer();
             }
         }
 
         private void ChangeStatsForFirstPlayer()
         {
-            FirstPlayerName.Text = "Name: " + _player1.Name;
-            FirstPlayerWin.Text = "Win: " + _player1.Win;
-            FirstPlayerLose.Text = "Lose: " + _player1.Lose;
-            FirstPlayerDraw.Text = "Draw: " + _player1.Draw;
+            if (_player1 is null)
+            {
+                FirstPlayerId.Text = "Id: ";
+                FirstPlayerName.Text = "Name: ";
+                FirstPlayerWin.Text = "Win: ";
+                FirstPlayerLose.Text = "Lose: ";
+                FirstPlayerDraw.Text = "Draw: ";
+            }
+            else
+            {
+                FirstPlayerId.Text = "Id: " + _player1.Id;
+                FirstPlayerName.Text = "Name: " + _player1.Name;
+                FirstPlayerWin.Text = "Win: " + _player1.Win;
+                FirstPlayerLose.Text = "Lose: " + _player1.Lose;
+                FirstPlayerDraw.Text = "Draw: " + _player1.Draw;
+            }
         }
 
         private void ChangeStatsForSecondPlayer()
         {
-            SecondPlayerName.Text = "Name: " + _player2.Name;
-            SecondPlayerWin.Text = "Win: " + _player2.Win;
-            SecondPlayerLose.Text = "Lose: " + _player2.Lose;
-            SecondPlayerDraw.Text = "Draw: " + _player2.Draw;
+            if (_player2 is null)
+            {
+                SecondPlayerId.Text = "Id: ";
+                SecondPlayerName.Text = "Name: ";
+                SecondPlayerWin.Text = "Win: ";
+                SecondPlayerLose.Text = "Lose: ";
+                SecondPlayerDraw.Text = "Draw: ";
+            }
+            else
+            {
+                SecondPlayerId.Text = "Id: " + _player2.Id;
+                SecondPlayerName.Text = "Name: " + _player2.Name;
+                SecondPlayerWin.Text = "Win: " + _player2.Win;
+                SecondPlayerLose.Text = "Lose: " + _player2.Lose;
+                SecondPlayerDraw.Text = "Draw: " + _player2.Draw;
+            }
         }
 
 
@@ -176,7 +354,8 @@ namespace Lab3
         {
             if (!_isNowGame) return;
             sender.GetType().GetProperty("Content")?.SetValue(sender, _playersMove % 2 == 0 ? "X" : "O");
-
+            var user1 = _context.Users.First(a => a.Id == _player1.Id);
+            var user2 = _context.Users.First(a => a.Id == _player2.Id);
             if (CheckWin())
             {
                 MessageBox.Show((_playersMove % 2 == 0 ? "Player 1" : "Player 2") + " win");
@@ -186,15 +365,18 @@ namespace Lab3
 
                 if (_playersMove % 2 == 0)
                 {
-                    _player1.WinGame();
-                    _player2.LoseGame();
+                    user1.Win++;
+                    user2.Lose++;
                 }
                 else
                 {
-                    _player2.WinGame();
-                    _player1.LoseGame();
+                    user2.Win++;
+                    user1.Lose++;
                 }
 
+                _context.SaveChanges();
+                _player1 = user1;
+                _player2 = user2;
                 ChangeStatsForFirstPlayer();
                 ChangeStatsForSecondPlayer();
                 return;
@@ -207,12 +389,15 @@ namespace Lab3
                 DefaultViewMainGame();
                 PlayerMoveLabel.Content = "The player's move:";
                 MessageBox.Show("Draw!");
-                _player1.DrawGame();
-                _player2.DrawGame();
-                ChangeStatsForFirstPlayer();
-                ChangeStatsForSecondPlayer();
+                user1.Draw++;
+                user2.Draw++;
             }
 
+            _context.SaveChanges();
+            _player1 = user1;
+            _player2 = user2;
+            ChangeStatsForFirstPlayer();
+            ChangeStatsForSecondPlayer();
             PlayerMoveLabel.Content = "The player's move: " + (_playersMove % 2 == 0 ? "Player 1" : "Player 2");
         }
 
